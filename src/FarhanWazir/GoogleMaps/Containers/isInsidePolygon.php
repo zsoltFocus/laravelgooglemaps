@@ -2,13 +2,13 @@
 /*
 Description: The point-in-polygon algorithm allows you to check if a point is
 inside a polygon or outside of it.
-Author: Michaël Niessen (2009)
+Author: Michaï¿½l Niessen (2009)
 Website: http://AssemblySys.com
 
 Tutorial URL::: http://assemblysys.com/php-point-in-polygon-algorithm
  
 If you find this script useful, you can show your
-appreciation by getting Michaël a cup of coffee ;)
+appreciation by getting Michaï¿½l a cup of coffee ;)
 PayPal: michael.niessen@assemblysys.com
  
 As long as this notice (including author name and details) is included and
@@ -17,10 +17,10 @@ http://www.gnu.org/licenses/gpl.html
 */
 
 class isInsidePolygon {
-    var $pointOnVertex = true; // Check if the point sits exactly on one of the vertices?
+    public $pointOnVertex = true; // Check if the point sits exactly on one of the vertices?
 
     //Constructor
-    function isInsidePolygon() {}
+    public function __construct() {}
 
     function pointInPolygon($point, $polygon, $pointOnVertex = true) {
         $this->pointOnVertex = $pointOnVertex;
@@ -33,7 +33,7 @@ class isInsidePolygon {
         }
 
         // Check if the point sits exactly on a vertex
-        if ($this->pointOnVertex == true and $this->pointOnVertex($point, $vertices) == true) {
+        if ($this->pointOnVertex === true && $this->pointOnVertex($point, $vertices) === true) {
             return true; //return "vertex"; //point is on boundary point
         }
 
@@ -44,40 +44,42 @@ class isInsidePolygon {
         for ($i=1; $i < $vertices_count; $i++) {
             $vertex1 = $vertices[$i-1];
             $vertex2 = $vertices[$i];
-            if ($vertex1['y'] == $vertex2['y'] and $vertex1['y'] == $point['y'] and $point['x'] > min($vertex1['x'], $vertex2['x']) and $point['x'] < max($vertex1['x'], $vertex2['x'])) { // Check if point is on an horizontal polygon boundary
+            if ($vertex1['y'] === $vertex2['y'] and $vertex1['y'] === $point['y'] and $point['x'] > min($vertex1['x'], $vertex2['x']) and $point['x'] < max($vertex1['x'], $vertex2['x'])) { // Check if point is on an horizontal polygon boundary
                 return true; //return "boundary"; //point is on boundary line
             }
-            if ($point['y'] > min($vertex1['y'], $vertex2['y']) and $point['y'] <= max($vertex1['y'], $vertex2['y']) and $point['x'] <= max($vertex1['x'], $vertex2['x']) and $vertex1['y'] != $vertex2['y']) {
+            if ($point['y'] > min($vertex1['y'], $vertex2['y']) and $point['y'] <= max($vertex1['y'], $vertex2['y']) and $point['x'] <= max($vertex1['x'], $vertex2['x']) and $vertex1['y'] !== $vertex2['y']) {
                 $xinters = ($point['y'] - $vertex1['y']) * ($vertex2['x'] - $vertex1['x']) / ($vertex2['y'] - $vertex1['y']) + $vertex1['x'];
-                if ($xinters == $point['x']) { // Check if point is on the polygon boundary (other than horizontal)
+                if ($xinters === $point['x']) { // Check if point is on the polygon boundary (other than horizontal)
                     return true; //return "boundary"; //point is on boundary line
                 }
-                if ($vertex1['x'] == $vertex2['x'] || $point['x'] <= $xinters) {
+                if ($point['x'] <= $xinters || $vertex1['x'] === $vertex2['x']) {
                     $intersections++;
                 }
             }
         }
         // If the number of edges we passed through is odd, then it's in the polygon. 
-        if ($intersections % 2 != 0) {
+        if ($intersections % 2 !== 0) {
             return true; //return "inside"; //point is inside
         }
 
         return false; //return "outside"; //point is outside
     }
 
-    private function pointOnVertex($point, $vertices) {
+    private function pointOnVertex($point, $vertices): ?bool
+    {
         foreach($vertices as $vertex) {
-            if ($point == $vertex) {
+            if ($point === $vertex) {
                 return true;
             }
         }
     }
 
-    private function pointStringToCoordinates($pointString) {
-        if(strpos($pointString, ", ") !== false) $coordinates = explode(", ", $pointString);
-        elseif(strpos($pointString, ",") !== false) $coordinates = explode(", ", $pointString);
-        else $coordinates = explode(" ", $pointString);
-        return array("x" => $coordinates[0], "y" => $coordinates[1]);
+    private function pointStringToCoordinates($pointString): array
+    {
+        if(strpos($pointString, ', ') !== false) $coordinates = explode(', ', $pointString);
+        elseif(strpos($pointString, ',') !== false) $coordinates = explode(', ', $pointString);
+        else $coordinates = explode(' ', $pointString);
+        return array('x' => $coordinates[0], 'y' => $coordinates[1]);
     }
 
 }
